@@ -1,0 +1,40 @@
+# Gitleaks config — controls the secret scanner used by lefthook.yml.
+# Copy to your repo root as `.gitleaks.toml`.
+#
+# By default this extends Gitleaks' built-in rules, which already detect AWS keys,
+# GitHub/GitLab tokens, Slack/Stripe/OpenAI keys, private keys, JWTs, and generic
+# high-entropy secrets. You usually only need to add an allowlist for false positives.
+
+title = "Engine Room secret scan"
+
+[extend]
+useDefault = true
+
+# Allowlist: tell the scanner about things that LOOK like secrets but aren't, so it
+# stops flagging them. Keep this tight — every entry is a hole in the net.
+[allowlist]
+description = "Known-safe paths and example placeholders"
+paths = [
+  '''\.env\.example$''',
+  '''(^|/)tests?/fixtures/''',
+]
+# Regexes for placeholder values that are safe to commit (e.g. in docs/examples).
+regexes = [
+  '''EXAMPLE_[A-Z0-9_]+''',
+  '''your-[a-z-]+-here''',
+]
+
+# ---------------------------------------------------------------------------
+# Know what this actually catches
+# ---------------------------------------------------------------------------
+# The default ruleset is good but it is not magic, and it changes between versions.
+# Verified on gitleaks 8.30.1: it catches private-key blocks, GitHub/GitLab/Slack/Stripe
+# tokens, and generic high-entropy assignments like  api_key = "<random>"  -- but it does
+# NOT flag a bare AWS access key ID (AKIA...). Upstream treats that as a public identifier;
+# the half that can actually authenticate, the AWS SECRET access key, is still caught.
+#
+# So: this gate is a safety net, not a licence to stop thinking. Scan your own diff for
+# credentials before you push, and if you want to prove what your version catches, stage a
+# fake secret in a scratch repo and run:
+#     gitleaks protect --staged --redact --config .gitleaks.toml
+# Never test with a real credential, and never commit the fixture.

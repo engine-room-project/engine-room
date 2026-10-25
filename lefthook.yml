@@ -1,0 +1,26 @@
+# Agent-neutral local lifecycle gates. Lefthook invokes Git's POSIX shell on Windows and the
+# system shell on Linux; .gitattributes keeps every *.sh file LF-only.
+
+pre-commit:
+  parallel: true
+  commands:
+    no-commit-on-default:
+      run: sh scripts/hooks/no-commit-on-main.sh
+    secret-scan:
+      run: gitleaks protect --staged --redact --config .gitleaks.toml
+    no-large-files:
+      run: sh scripts/hooks/check-large-files.sh
+    lockfile-sanity:
+      run: sh scripts/hooks/check-lockfiles.sh
+
+commit-msg:
+  commands:
+    conventional-commit:
+      run: sh scripts/hooks/check-commit-message.sh {1}
+
+# Configure scripts/ci/project-checks.sh with this project's lint, test, and build commands.
+# It is run locally before push and independently by the governance CI workflow.
+pre-push:
+  commands:
+    project-checks:
+      run: sh scripts/ci/project-checks.sh

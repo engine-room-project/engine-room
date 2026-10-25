@@ -1,0 +1,110 @@
+name: Review Gate
+
+# This workflow is evaluated from the protected base branch. It never checks out or executes
+# pull-request code. It writes one status to the exact PR head after a non-author approval.
+on:
+  pull_request_target: # zizmor: ignore[dangerous-triggers] base workflow never checks out or executes PR code; write is one fixed commit status
+    branches: [main]
+    types: [opened, reopened, synchronize, ready_for_review]
+  pull_request_review:
+    types: [submitted, dismissed]
+
+permissions: {}
+
+jobs:
+  exact-head-review:
+    name: Review Gate / exact-head-review
+    if: github.repository == github.event.pull_request.base.repo.full_name && github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+      statuses: write
+    steps:
+      # Optional: when GOVERNANCE_REVIEWER_APP_ID (repo variable) and
+      # GOVERNANCE_REVIEWER_APP_PRIVATE_KEY (repo secret) are configured, this status is
+      # published by a dedicated GitHub App identity instead of the shared Actions bot that
+      # every other required check also uses. That lets a required-status-check
+      # `integration_id` trust this specific producer, not any workflow holding the default
+      # token. Absent those, the job falls back to the default token below (today's behavior).
+      - name: Mint dedicated reviewer identity token
+        id: reviewer-app
+        if: ${{ vars.GOVERNANCE_REVIEWER_APP_ID != '' }}
+        continue-on-error: true
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ vars.GOVERNANCE_REVIEWER_APP_ID }}
+          private-key: ${{ secrets.GOVERNANCE_REVIEWER_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: read
+          permission-pull-requests: read
+          permission-statuses: write
+
+      - name: Verify review and publish exact-head status
+        env:
+          GH_TOKEN: ${{ steps.reviewer-app.outputs.token || github.token }}
+          REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          context='governance/exact-head-review'
+          description='Independent review must approve this exact PR head'
+
+          policy=$(gh api "repos/$REPOSITORY/contents/.governance/policy.json?ref=$BASE_SHA" \
+            --jq '.content' | tr -d '\n' | base64 --decode)
+          jq -e '.trustRootPaths | type == "array" and length > 0 and all(.[]; type == "string" and length > 0)' \
+            <<<"$policy" >/dev/null
+          mapfile -t trust_roots < <(jq -r '.trustRootPaths[]' <<<"$policy")
+
+          # Read from BASE_SHA, never from the PR's own copy: a PR must not be able to flip this
+          # flag in its own diff to escape review for itself.
+          profile=$(gh api "repos/$REPOSITORY/contents/.github/governance-profile.json?ref=$BASE_SHA" \
+            --jq '.content' 2>/dev/null | tr -d '\n' | base64 --decode 2>/dev/null) || profile='{}'
+          require_review=$(jq -r '.review.requireIndependentReview as $v | if $v == null then true else $v end' \
+            <<<"$profile" 2>/dev/null) || require_review=true
+
+          is_trust_root() {
+            local path=$1 pattern
+            for pattern in "${trust_roots[@]}"; do
+              case "$path" in
+                $pattern) return 0 ;;
+              esac
+            done
+            return 1
+          }
+
+          changed=$(gh api --paginate "repos/$REPOSITORY/pulls/$PR_NUMBER/files" --jq '.[].filename')
+          substantive=''
+          while IFS= read -r path; do
+            [[ -n "$path" ]] || continue
+            if is_trust_root "$path" || [[ ! "$path" =~ \.(md|markdown|txt|rst|adoc)$ ]]; then
+              substantive+="$path"$'\n'
+            fi
+          done <<<"$changed"
+
+          state=failure
+          if [[ -z "$substantive" ]]; then
+            state=success
+            description='Deterministically classified as prose-only'
+          elif [[ "$require_review" == "false" ]]; then
+            state=success
+            description='Independent review not required by repository policy'
+          else
+            reviewer=$(gh api --paginate "repos/$REPOSITORY/pulls/$PR_NUMBER/reviews" \
+              --jq ".[] | select(.state == \"APPROVED\" and .commit_id == \"$HEAD_SHA\" and .user.login != \"$PR_AUTHOR\") | .user.login" |
+              head -n 1)
+            if [[ -n "$reviewer" ]]; then
+              state=success
+              description="Exact HEAD approved by $reviewer"
+            fi
+          fi
+
+          gh api --method POST "repos/$REPOSITORY/statuses/$HEAD_SHA" \
+            -f state="$state" -f context="$context" -f description="$description" \
+            -f target_url="$GITHUB_SERVER_URL/$REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          [[ "$state" == success ]]

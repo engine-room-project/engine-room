@@ -1,0 +1,31 @@
+# Proposed organization team: must exist and be owner-approved before the first push.
+# Only trust-root paths are listed so prose-only and ordinary non-governance changes are not forced
+# through owner review. Substantive code review is enforced by the exact-head status instead.
+/AGENTS.md @engine-room-project/maintainers
+/REPO_RULES.md @engine-room-project/maintainers
+/.governance-version @engine-room-project/maintainers
+/.governance/ @engine-room-project/maintainers
+/governance-manifest.json @engine-room-project/maintainers
+/governance-policy.template.json @engine-room-project/maintainers
+/new-governed-repo.sh @engine-room-project/maintainers
+/new-governed-repo.ps1 @engine-room-project/maintainers
+/update-governance.sh @engine-room-project/maintainers
+/update-governance.ps1 @engine-room-project/maintainers
+/update-global-rules.sh @engine-room-project/maintainers
+/update-global-rules.ps1 @engine-room-project/maintainers
+/github-governance.sh @engine-room-project/maintainers
+/github-governance.ps1 @engine-room-project/maintainers
+/sync-remotes.sh @engine-room-project/maintainers
+/sync-remotes.ps1 @engine-room-project/maintainers
+/github/ @engine-room-project/maintainers
+/lefthook.yml @engine-room-project/maintainers
+/.gitleaks.toml @engine-room-project/maintainers
+/scripts/hooks/ @engine-room-project/maintainers
+/scripts/ci/ @engine-room-project/maintainers
+/.github/workflows/ @engine-room-project/maintainers
+/.github/CODEOWNERS @engine-room-project/maintainers
+/.github/governance-profile.json @engine-room-project/maintainers
+/CLAUDE.md @engine-room-project/maintainers
+/GEMINI.md @engine-room-project/maintainers
+/.cursor/ @engine-room-project/maintainers
+/.claude/ @engine-room-project/maintainers

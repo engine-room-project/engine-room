@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "<independent reviewer identity>",
+  "implementationAgent": "<implementation identity>",
+  "verdict": "PASS",
+  "reviewedCommit": "<commit SHA reviewed>",
+  "codeDigest": "<sha256 emitted by scripts/ci/verify-review.sh --print-digest>",
+  "reviewedAt": "<ISO-8601 UTC timestamp>",
+  "findings": "<summary or link>"
+}

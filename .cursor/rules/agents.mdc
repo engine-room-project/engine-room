@@ -1,0 +1,8 @@
+---
+description: Follow the canonical repository policy in AGENTS.md
+alwaysApply: true
+---
+
+Read and follow the root `AGENTS.md` before changing files. It is the canonical policy; this
+adapter does not duplicate or override it. Local Git hooks, CI, hosting protections, and human
+governance approval remain in force.

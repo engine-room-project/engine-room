@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "profileName": "Repo Governance V3",
+  "defaultBranch": "main",
+  "governanceOwner": "engine-room-project/maintainers",
+  "rulesetName": "repo-governance-v3",
+  "requiredStatusChecks": [
+    "Governance / invariants",
+    "Governance / secrets",
+    "Governance / actions-security",
+    "Project / checks",
+    "governance/exact-head-review"
+  ],
+  "review": {
+    "requiredApprovals": 0,
+    "dismissStaleApprovals": true,
+    "requireCodeOwnerReview": false,
+    "requireLastPushApproval": false,
+    "requireExtraApprovalForUnattributedChanges": false,
+    "requireConversationResolution": true,
+    "statusContext": "governance/exact-head-review",
+    "preferredTrustedIntegrationId": 15368,
+    "externalReviewerAppId": null,
+    "requireIndependentReview": false
+  },
+  "history": {
+    "requirePullRequest": true,
+    "requireLinearHistory": true,
+    "blockForcePush": true,
+    "blockDeletion": true
+  },
+  "actions": {
+    "defaultWorkflowPermissions": "read",
+    "canApprovePullRequestReviews": false
+  }
+}

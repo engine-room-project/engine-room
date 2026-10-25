@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "governanceVersion": "3.0.0",
+  "defaultBranch": "main",
+  "maxNewFileKiB": 2048,
+  "review": {
+    "mode": "github-review",
+    "localAttestationPath": ".governance/review-attestation.json"
+  },
+  "trustRootPaths": [
+    "AGENTS.md",
+    "REPO_RULES.md",
+    ".governance-version",
+    ".governance/**",
+    "governance-manifest.json",
+    "governance-policy.template.json",
+    "new-governed-repo.sh",
+    "new-governed-repo.ps1",
+    "update-governance.sh",
+    "update-governance.ps1",
+    "update-global-rules.sh",
+    "update-global-rules.ps1",
+    "github-governance.sh",
+    "github-governance.ps1",
+    "sync-remotes.sh",
+    "sync-remotes.ps1",
+    "github/**",
+    "lefthook.yml",
+    ".gitleaks.toml",
+    "scripts/hooks/**",
+    "scripts/ci/**",
+    ".github/workflows/**",
+    ".github/CODEOWNERS",
+    ".github/governance-profile.json",
+    "CLAUDE.md",
+    "GEMINI.md",
+    ".cursor/**",
+    ".claude/**"
+  ],
+  "proseOnlyPatterns": [
+    "*.md",
+    "*.markdown",
+    "*.txt",
+    "*.rst",
+    "*.adoc"
+  ]
+}
