@@ -1,0 +1,69 @@
+# Copy this to `.gitignore` in your new repo and commit it FIRST, before any code.
+# Adjust per project — uncomment the data section if you generate large files.
+
+# Secrets — never commit these
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets.*
+
+# Dependencies / virtual envs
+node_modules/
+.venv/
+venv/
+env/
+vendor/
+
+# Build output
+build/
+dist/
+out/
+target/
+*.egg-info/
+__pycache__/
+*.py[cod]
+
+# Local state / caches / logs
+*.log
+.cache/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+coverage/
+*.local
+config.local.*
+.governance-backup/
+
+# Claude / agent local-only files (keep shared rules tracked; ignore personal ones)
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/review/
+
+# Large data / media (uncomment and adjust per project)
+# models/
+# data/
+# *.wav
+# *.mp3
+# *.zip
+
+# Editor / OS cruft
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Engine Room per-user state and credentials
+state/
+.runpod/
+*.xml
+settings.json
+sessions.jsonl
+model.json
+library.json
+models.json
+*.pid
+*.stop
+.governance/review-attestation.json
