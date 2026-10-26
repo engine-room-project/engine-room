@@ -4,8 +4,9 @@ The local implementation contains a separate worker/deadline monitor, a Linux
 owner-only Unix socket daemon and a pinned private SSH client. The RunPod rental
 adapter is integrated in code. None of this has been deployed or validated against
 an independent host or actual rental. Model streaming and UI-liveness-bound desktop
-leases are implemented locally. Colab, application UI/tool integration and
-existing-machine connection still need implementation.
+leases are implemented locally. Colab, Windows application/tool integration and
+existing-machine access are implemented with synthetic/native evidence. Independent-host,
+account, GPU, tool-protocol and billing acceptance remain open.
 
 ## Protection and recovery
 
