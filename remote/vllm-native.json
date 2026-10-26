@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "version": "0.32.0",
+  "source_commit": "5df63a7203cdb9328d824a27b682e77c7b9928be",
+  "python": "3.12",
+  "platform": "linux-x86_64",
+  "glibc_target": "2.39",
+  "resolver": "uv 0.13.0",
+  "lock_sha256": "103c08c8d35e8e4aa7fc91c128c52d43029a356e5769abe577d64f18338b7ec1",
+  "resolved_packages": 198,
+  "package_metadata_url": "https://pypi.org/pypi/vllm/0.32.0/json",
+  "wheel": {
+    "name": "vllm-0.32.0-cp38-abi3-manylinux_2_28_x86_64.whl",
+    "sha256": "5e2ecdc5b0baf72921c288486417ca82778456a448e4fe60b62ee43c0dfc8611"
+  },
+  "source_files": [
+    {
+      "path": "requirements/cuda.txt",
+      "url": "https://raw.githubusercontent.com/vllm-project/vllm/5df63a7203cdb9328d824a27b682e77c7b9928be/requirements/cuda.txt",
+      "sha256": "b168c9beb5bbb28e4900558bd65a87000bf142b087aeca852308addc0e745dbe"
+    },
+    {
+      "path": "requirements/common.txt",
+      "url": "https://raw.githubusercontent.com/vllm-project/vllm/5df63a7203cdb9328d824a27b682e77c7b9928be/requirements/common.txt",
+      "sha256": "366cb94fae6ea961da1e7d1c855f6316c3897b5ce9a839017db2bbebb668055a"
+    },
+    {
+      "path": "pyproject.toml",
+      "url": "https://raw.githubusercontent.com/vllm-project/vllm/5df63a7203cdb9328d824a27b682e77c7b9928be/pyproject.toml",
+      "sha256": "eaa19cba70f13234be4acdc1eeb2126b937c6f0892fd1af29863db5a62bee95b"
+    }
+  ],
+  "validation": "Wheel-only dependency resolution; native install, import, GPU, runtime footprint and live provider acceptance unvalidated",
+  "torch_version": "2.13.0",
+  "minimum_cuda": "13.0"
+}

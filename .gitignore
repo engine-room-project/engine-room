@@ -67,3 +67,16 @@ models.json
 *.pid
 *.stop
 .governance/review-attestation.json
+
+# Independent-controller / desktop transport state; never release these files.
+controller.json
+controller-known-hosts
+enrollment.json
+connections.json
+controller.sock
+controller-owner/
+credentials/
+receipts/
+runpod-operations/
+
+colab-operations/

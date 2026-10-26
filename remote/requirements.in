@@ -1,0 +1,2 @@
+# GGUF downloader only; inference and desktop/core have separate dependency boundaries.
+huggingface_hub==2.3.0

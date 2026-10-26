@@ -1,0 +1,2 @@
+# Optional Colab controller transport only; core and RunPod use the standard library.
+google-colab-cli==0.7.5

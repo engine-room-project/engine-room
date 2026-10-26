@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "package": "google-colab-cli",
+  "version": "0.7.5",
+  "upstream_commit": "4025416a03361d2ff34d06a4523ae76ce4c9bbaf",
+  "repository": "https://github.com/googlecolab/google-colab-cli",
+  "wheel": {
+    "name": "google_colab_cli-0.7.5-py3-none-any.whl",
+    "sha256": "2b303ed21ebd6da829f80d506224a6cd4f0e62d506fb373166d06a0532e516a9"
+  },
+  "validation": "Public source and wheel bytes verified; no actual account or rental validation",
+  "source_files": [
+    {
+      "sha256": "7081d2c9decbc9a4cafb4ab89202c7e7a644f72bd74a7e846bffce5344839a06",
+      "file": "client.py"
+    },
+    {
+      "sha256": "0bef52f554d75a277b91eef897ccaf0c54d5e2e6535c2b00257a6daba242e009",
+      "file": "auth.py"
+    },
+    {
+      "sha256": "b6e936db0ddd6e4c31ef7b516c456be7549c34394a70a3d1356b679ec168a594",
+      "file": "consumption.py"
+    },
+    {
+      "file": "colab_cli/commands/ssh.py",
+      "sha256": "6914bea8a0fd206df95edd6bc0214441ca9ee9e943a21ea400b7cc01b2a5cc7d",
+      "source": "published-wheel"
+    },
+    {
+      "file": "colab_cli/runtime.py",
+      "sha256": "e95adf8dc98c9a08dce1fff035839863cbe80c9571d36634c3bc3d0cfcf06bcb",
+      "source": "published-wheel"
+    }
+  ]
+}

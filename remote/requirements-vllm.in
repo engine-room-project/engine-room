@@ -1,0 +1,3 @@
+# Native Linux Python 3.12 vLLM runtime; keep separate from GGUF downloader.
+vllm==0.32.0
+huggingface_hub==2.3.0

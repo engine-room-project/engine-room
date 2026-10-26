@@ -1,0 +1,28 @@
+# Deployment template only. Installation and credential setup need owner approval.
+# Dedicated Linux user account; install source at that account's ~/engine-room.
+[Unit]
+Description=Engine Room private rental controller
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/engine-room
+ExecStart=/usr/bin/python3 -m engine_room.controller_service serve --root %h/.local/share/engine-room-controller
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONDONTWRITEBYTECODE=1
+UMask=0077
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=180
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=%h/.local/share/engine-room-controller
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictSUIDSGID=true
+LockPersonality=true
+
+[Install]
+WantedBy=default.target
