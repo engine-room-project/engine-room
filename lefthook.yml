@@ -16,7 +16,7 @@ pre-commit:
 commit-msg:
   commands:
     conventional-commit:
-      run: sh scripts/hooks/check-commit-message.sh {1}
+      run: sh scripts/hooks/check-commit-message.sh '{1}'
 
 # Configure scripts/ci/project-checks.sh with this project's lint, test, and build commands.
 # It is run locally before push and independently by the governance CI workflow.
