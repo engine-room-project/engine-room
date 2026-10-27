@@ -1,6 +1,7 @@
 # Engine Room
 
-Unpublished release candidate. The project licence and public release require owner decisions.
+Unpublished release candidate. Engine Room code is licensed under MIT (see LICENSE).
+Public release requires final owner approval.
 The candidate has automated evidence; it has not passed independent-account provider,
 GPU, shutdown or billing acceptance. Do not treat it as a supported public release.
 
@@ -13,4 +14,4 @@ never rents anything. Persistent storage can keep billing after compute stops.
 Start with [installation](docs/INSTALLATION.md), [supported combinations](docs/SUPPORTED_COMBINATIONS.md),
 [privacy](docs/PRIVACY.md), [costs, shutdown and recovery](docs/OPERATIONS.md), and
 [source packaging](docs/PACKAGING.md). Third-party licences are preserved in
-[THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES/README.md); they do not select the project licence.
+[THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES/README.md); their terms remain separate from Engine Room's MIT licence.

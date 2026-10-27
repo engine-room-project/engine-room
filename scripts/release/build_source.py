@@ -7,10 +7,10 @@ import re
 import subprocess
 import zipfile
 
-ROOT_FILES={"Install-EngineRoom.ps1","EngineRoom.ps1","models.ps1","tools.ps1","README.md"}
+ROOT_FILES={"LICENSE","Install-EngineRoom.ps1","EngineRoom.ps1","models.ps1","tools.ps1","README.md"}
 PREFIXES=("engine_room/","engine_room_connectors/","desktop/","controller/","remote/","THIRD_PARTY_NOTICES/","tests/","scripts/release/")
 DOCS={"docs/COLAB_CONNECTOR.md","docs/DEPENDENCIES.md","docs/ATTACHMENTS.md","docs/CODING_TOOLS.md","docs/STORAGE_RECOVERY.md","docs/RUNPOD_CONNECTOR.md","docs/CONTROLLER.md","docs/DESKTOP.md","docs/INSTALLATION.md","docs/OPERATIONS.md","docs/PRIVACY.md","docs/SUPPORTED_COMBINATIONS.md","docs/PACKAGING.md"}
-REQUIRED={"Install-EngineRoom.ps1","README.md","EngineRoom.ps1","desktop/ui.ps1","engine_room/desktop_bridge.py","engine_room/controller_service.py",*DOCS,
+REQUIRED={"LICENSE","Install-EngineRoom.ps1","README.md","EngineRoom.ps1","desktop/ui.ps1","engine_room/desktop_bridge.py","engine_room/controller_service.py",*DOCS,
     "THIRD_PARTY_NOTICES/README.md","THIRD_PARTY_NOTICES/google-colab-cli-LICENSE.txt","THIRD_PARTY_NOTICES/vllm-LICENSE.txt","THIRD_PARTY_NOTICES/llama.cpp-LICENSE.txt","THIRD_PARTY_NOTICES/huggingface-hub-LICENSE.txt"}
 FORBIDDEN={"__pycache__",".git",".venv","credentials","receipts","state","controller-owner","runpod-operations","colab-operations"}
 
@@ -37,7 +37,7 @@ def build(root,output,revision="HEAD"):
     missing=REQUIRED-entries.keys()
     if missing: raise ValueError("Required source documentation/notices are missing: "+", ".join(sorted(missing)))
     if sum(len(value[0]) for value in entries.values())>128*1024*1024: raise ValueError("Source package exceeds its bound.")
-    manifest=dict(schema=1,source_commit=commit,status="UNPUBLISHED CANDIDATE - OWNER LICENCE AND RELEASE DECISIONS REQUIRED",
+    manifest=dict(schema=1,source_commit=commit,status="UNPUBLISHED CANDIDATE - MIT; OWNER RELEASE APPROVAL REQUIRED",
         files=[dict(path=name,sha256=hashlib.sha256(data).hexdigest(),bytes=len(data)) for name,(data,_) in sorted(entries.items())])
     entries["SOURCE_MANIFEST.json"]=((json.dumps(manifest,sort_keys=True,indent=2)+"\n").encode(),b"100644")
     output=Path(output); output.parent.mkdir(parents=True,exist_ok=True)

@@ -44,7 +44,7 @@ def inspect_source(source):
         data=path.read_bytes(); total+=len(data)
         if total>128*1024*1024 or hashlib.sha256(data).hexdigest()!=item["sha256"]: raise ValueError("Source integrity verification failed.")
         result[name]=data
-    if not {"EngineRoom.ps1","desktop/ui.ps1","engine_room/desktop_bridge.py","THIRD_PARTY_NOTICES/README.md"}.issubset(result):
+    if not {"LICENSE","EngineRoom.ps1","desktop/ui.ps1","engine_room/desktop_bridge.py","THIRD_PARTY_NOTICES/README.md"}.issubset(result):
         raise ValueError("Required application source or notices are missing.")
     result["SOURCE_MANIFEST.json"]=raw
     return manifest,result

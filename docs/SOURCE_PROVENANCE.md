@@ -5,11 +5,11 @@ download and launch code were adapted from the existing Engine Room development 
 f8c3ad82b9fd49f1aff300379a1211fd66623423 after source inspection. The import excludes
 provider offers, personal defaults, local state, private endpoints and old Git metadata.
 
-The current release foundation otherwise uses Python standard library code written for
-this release. No third-party source or executable binaries have been bundled yet.
-Required upstream licence/NOTICE text must be added when pinned third-party artifacts
-or source are included. Downloading dependencies at runtime does not authorize omitting
-applicable notices from any bundled files. The final project licence remains unselected;
+The release foundation otherwise uses Python standard library code written for this
+release. Adapted Colab protocol portions retain their Google attribution and Apache-2.0
+notice. Required upstream licence texts are preserved in THIRD_PARTY_NOTICES; no runtime
+executable binaries are bundled. Downloading dependencies at runtime does not authorize
+omitting applicable notices from any bundled files. The owner selected MIT for Engine Room code;
 this local development candidate is not an authorized public release.
 
 Shared model runtime imports huggingface_hub only for GGUF download and executes either

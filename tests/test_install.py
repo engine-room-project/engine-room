@@ -14,7 +14,7 @@ class InstallationTests(unittest.TestCase):
         self.temp=tempfile.TemporaryDirectory(); self.addCleanup(self.temp.cleanup)
         self.root=Path(self.temp.name); self.source=self.root/"source"; self.source.mkdir(); self.target=self.root/"installed"
         self.manifest=dict(schema=1,source_commit="a"*40,status="UNPUBLISHED CANDIDATE - OWNER DECISIONS REQUIRED",files=[])
-        for name in ("EngineRoom.ps1","desktop/ui.ps1","engine_room/desktop_bridge.py","THIRD_PARTY_NOTICES/README.md"):
+        for name in ("LICENSE","EngineRoom.ps1","desktop/ui.ps1","engine_room/desktop_bridge.py","THIRD_PARTY_NOTICES/README.md"):
             path=self.source/name; path.parent.mkdir(parents=True,exist_ok=True); data=("Synthetic "+name).encode(); path.write_bytes(data)
             self.manifest["files"].append(dict(path=name,sha256=hashlib.sha256(data).hexdigest(),bytes=len(data)))
         self.save()

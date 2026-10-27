@@ -46,7 +46,7 @@ Attached machines are never terminated without separate explicit authority.
 Preserve the Windows PowerShell interface and reusable Python/shell model execution
 where practical. Extract provider boundaries instead of rewriting working inference.
 Dependencies and remote artifacts need immutable versions and verification evidence.
-Preserve third-party notices. The final project licence remains an owner decision.
+Preserve third-party notices. The owner selected MIT for Engine Room code; upstream licences remain separate.
 No telemetry or additional credential delegation is introduced by assumption.
 
 ## Success criteria
@@ -60,7 +60,7 @@ No telemetry or additional credential delegation is introduced by assumption.
 - Independent accounts/configuration, provider state and billing are validated separately
   from mocks. Paid runs require an approved concrete budget.
 - Final code is independently reviewed at the exact submitted state.
-- Owner governance ratification, licence selection and publication approval remain explicit.
+- Owner governance ratification and publication approval remain explicit; MIT is selected.
 
 ## Risks and decisions
 

@@ -41,7 +41,7 @@ actual footprint and provider disk semantics before closing the storage/reproduc
 findings. CUDA/driver restrictions must be checked before offering supported combinations.
 
 Third-party licence texts and preservation guidance are in THIRD_PARTY_NOTICES. The
-Engine Room project licence remains an owner decision. No runtime images/binaries are
+Engine Room code uses the owner-selected MIT licence. No runtime images/binaries are
 bundled into the source package by these download references.
 
 Evidence covers source checks and dependency/artifact integrity, not real container boot,

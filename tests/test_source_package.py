@@ -51,3 +51,7 @@ class SourcePackageTests(unittest.TestCase):
     def test_missing_required_notice_blocks_candidate(self):
         self.git("rm","THIRD_PARTY_NOTICES/vllm-LICENSE.txt"); self.commit()
         with self.assertRaises(ValueError): build(self.root,Path(self.temp.name)/"missing.zip")
+
+    def test_missing_owner_licence_blocks_candidate(self):
+        self.git("rm","LICENSE"); self.commit()
+        with self.assertRaises(ValueError): build(self.root,Path(self.temp.name)/"missing-licence.zip")

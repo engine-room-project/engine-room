@@ -1,7 +1,7 @@
 # Source candidate packaging
 
-The package is an unpublished candidate, not permission to distribute it. The project licence,
-governance ratification and final publication approval remain owner decisions. Required
+The package is an unpublished candidate, not permission to distribute it. The owner selected MIT for Engine Room code; LICENSE must be included.
+Governance ratification and final publication approval remain owner decisions. Required
 third-party licence texts remain intact. No provider credentials, runtime state, binaries,
 models, Git history or development archive are included.
 

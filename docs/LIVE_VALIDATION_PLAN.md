@@ -77,5 +77,5 @@ Do not replay an ambiguous request or describe provider outage as confirmed shut
    dispositions linked to each of the22 findings, then run final exact-state checks/review.
 
 Final independent code review must cover the exact final code; later behavioral changes
-invalidate it. Governance/team ratification, project licence and publication are separate
-owner decisions. No gate is closed solely because a synthetic test passed.
+invalidate it. Governance/team ratification and publication remain owner decisions;
+MIT is selected for Engine Room code. No gate is closed solely because a synthetic test passed.

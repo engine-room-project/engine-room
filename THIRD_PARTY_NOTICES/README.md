@@ -2,7 +2,8 @@
 
 The source package includes the upstream licence texts for the selected llama.cpp,
 Hugging Face Hub and vLLM runtime candidates. These are third-party notices, not a
-selection of the Engine Room project licence. Required copyright attribution stays intact.
+replacement for Engine Room's owner-selected MIT licence. Required upstream copyright
+attribution and licensing terms stay intact.
 
 Runtime containers and packages are downloaded from their upstream publishers. Preserve
 all licence, NOTICE, copyright and distribution metadata contained in their images,
