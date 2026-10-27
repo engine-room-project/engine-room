@@ -43,6 +43,14 @@ class InstallationTests(unittest.TestCase):
     def test_source_and_destination_cannot_nest(self):
         with self.assertRaises(ValueError): install(self.source,self.source/"copy")
         self.assertFalse((self.source/"copy").exists())
+    @unittest.skipUnless(os.name=="nt","Windows short (8.3) path spelling")
+    def test_short_path_spelling_cannot_hide_nesting(self):
+        import ctypes
+        (self.source/"long folder name").mkdir(); buffer=ctypes.create_unicode_buffer(1024)
+        ctypes.windll.kernel32.GetShortPathNameW(str(self.source/"long folder name"),buffer,1024)
+        if "~" not in buffer.value: self.skipTest("8.3 names are disabled on this volume")
+        with self.assertRaises(ValueError): install(self.source,Path(buffer.value)/"copy")
+        self.assertFalse((self.source/"long folder name"/"copy").exists())
     @unittest.skipUnless(os.name=="posix","Unix symlink fixture")
     def test_linked_destination_parent_cannot_create_unrelated_directories(self):
         outside=self.root/"outside"; outside.mkdir(); alias=self.root/"alias"; alias.symlink_to(outside,target_is_directory=True)

@@ -52,7 +52,9 @@ def inspect_source(source):
 
 def install(source,destination):
     manifest,files=inspect_source(source); source=Path(source).resolve(); destination=Path(destination).absolute()
-    if destination==source or source in destination.parents or destination in source.parents:
+    # Compare resolved forms: a Windows short (8.3) spelling would otherwise hide nesting.
+    resolved=Path(os.path.realpath(destination))
+    if resolved==source or source in resolved.parents or resolved in source.parents:
         raise ValueError("Choose a separate new installation directory.")
     if destination.exists() or destination.is_symlink(): raise ValueError("An existing installation is never overwritten.")
     for parent in (destination.parent,*destination.parent.parents):
