@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import tempfile
 import time
 import urllib.request
 
@@ -49,10 +50,16 @@ def status(root,process,settings,identity=model_identity):
 
 def child_environment(root):
     environment=os.environ.copy()
+    # Hub auth can come from OIDC, legacy env, token files or Colab secrets. Never
+    # let an image/account's ambient Hub settings select credentials for this child.
+    for name in tuple(environment):
+        if name.startswith(("HF_","HUGGING_FACE_","HUGGINGFACE_")):
+            environment.pop(name)
+    auth=Path(tempfile.mkdtemp(prefix=".hub-auth-",dir=root))
+    environment["HF_HOME"]=str(auth)
+    environment["HF_TOKEN_PATH"]=str(auth/"token")
     environment["HF_HUB_DISABLE_TELEMETRY"]="1"
-    environment.pop("HF_TOKEN",None)
-    environment.pop("HF_HUB_DISABLE_IMPLICIT_TOKEN",None)
-    environment["HF_HOME"]=environment.get("ENGINE_ROOM_WEIGHTS",str(root/"weights"))
+    environment["HF_HUB_DISABLE_IMPLICIT_TOKEN"]="1"
     environment["HF_ENDPOINT"]="https://huggingface.co"
     if (root/"llama-path").is_file():
         environment["LLAMA_SERVER"]=(root/"llama-path").read_text().strip()
@@ -61,7 +68,10 @@ def child_environment(root):
     if secret.exists():
         if secret.is_symlink() or secret.stat().st_mode&0o077 or secret.stat().st_size>16384:
             raise ValueError("The model credential file is not private.")
-        environment["HF_TOKEN"]=secret.read_text().strip()
+        token=secret.read_text().strip()
+        if not token: raise ValueError("The selected model credential is empty.")
+        environment["HF_TOKEN"]=token
+        environment["HF_HUB_DISABLE_IMPLICIT_TOKEN"]="0"
         secret.unlink()
     return environment
 

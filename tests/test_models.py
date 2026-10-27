@@ -1,5 +1,6 @@
 import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -9,7 +10,7 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 from engine_room.model_validation import gguf_files
-from engine_room.model_server import command, download, check_storage
+from engine_room.model_server import command, download, check_storage, choose_weights, main
 from engine_room.storage import plan_storage
 
 
@@ -86,6 +87,40 @@ class ModelTests(unittest.TestCase):
                 plan=check_storage(settings,folder,["model.safetensors"],snapshot_cache=True)
             self.assertEqual(len(content),plan.cached_bytes)
             self.assertEqual(content,(snapshot/"model.safetensors").read_bytes())
+
+    @unittest.skipUnless(os.name=="posix","Remote Linux cache links")
+    def test_linked_cache_root_or_parent_falls_back_without_touching_unrelated_data(self):
+        for linked_parent in (False,True):
+            with self.subTest(parent=linked_parent),tempfile.TemporaryDirectory() as folder:
+                base=Path(folder); root=base/"operation"; root.mkdir(); outside=base/"unrelated"; outside.mkdir()
+                (outside/"keep").write_text("Preserve")
+                link=base/"saved"; link.symlink_to(outside,target_is_directory=True)
+                requested=link/"model"/"revision" if linked_parent else link
+                settings={**self.settings(),"fileSizes":{"model.gguf":10}}
+                with patch.dict(os.environ,{"ENGINE_ROOM_WEIGHTS":str(requested)}),patch("engine_room.model_server.shutil.disk_usage",return_value=SimpleNamespace(free=10**10)):
+                    selected=choose_weights(settings,str(root))
+                self.assertEqual(str(root/"weights"),selected)
+                self.assertEqual(["keep"],[item.name for item in outside.iterdir()])
+                self.assertEqual("Preserve",(outside/"keep").read_text())
+
+    @unittest.skipUnless(os.name=="posix","Remote Linux cache links")
+    def test_linked_hub_metadata_is_refused_before_downloader_import(self):
+        with tempfile.TemporaryDirectory() as folder:
+            base=Path(folder); weights=base/"weights"; weights.mkdir(); outside=base/"unrelated"; outside.mkdir()
+            (weights/".cache").symlink_to(outside,target_is_directory=True)
+            with self.assertRaises(ValueError): download({**self.settings(),"fileSizes":{"model.gguf":10}},str(weights))
+            self.assertEqual([],list(outside.iterdir()))
+
+    def test_vllm_model_cache_never_replaces_isolated_authentication_home(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder); auth=root/"private-auth"; auth.mkdir()
+            settings=dict(id="example/model",revision="a"*40,engine="vLLM",context=8192,dtype="float16",fileSizes={"model.safetensors":100})
+            (root/"model.json").write_text(json.dumps(settings))
+            with patch.dict(os.environ,{"ENGINE_ROOM_ROOT":str(root),"ENGINE_ROOM_WEIGHTS":str(root/"weights"),"HF_HOME":str(auth)}),patch("engine_room.model_server.shutil.disk_usage",return_value=SimpleNamespace(free=10**10)),patch("engine_room.model_server.os.execvp") as execute:
+                main()
+                self.assertEqual(str(auth),os.environ["HF_HOME"])
+                self.assertEqual(str(root/"weights"/"hub"),os.environ["HF_HUB_CACHE"])
+                execute.assert_called_once()
 
     def test_hash_verified_cache_and_pinned_download(self):
         with tempfile.TemporaryDirectory() as folder:

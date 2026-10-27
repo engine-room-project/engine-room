@@ -1,4 +1,6 @@
 import io
+import importlib.metadata
+import sys
 import json
 import os
 from pathlib import Path
@@ -30,7 +32,43 @@ class RemoteAgentTests(unittest.TestCase):
             env=child_environment(self.root)
         self.assertNotIn("HF_TOKEN",env)
         self.assertEqual("https://huggingface.co",env["HF_ENDPOINT"])
-        self.assertEqual(str(self.root/"weights"),env["HF_HOME"])
+        self.assertEqual(self.root,Path(env["HF_HOME"]).parent)
+        self.assertTrue(Path(env["HF_HOME"]).name.startswith(".hub-auth-"))
+        self.assertEqual("1",env["HF_HUB_DISABLE_IMPLICIT_TOKEN"])
+        self.assertFalse(Path(env["HF_TOKEN_PATH"]).exists())
+    def test_legacy_oidc_and_token_file_settings_are_removed_from_child(self):
+        cached=self.root/"ambient-token"; cached.write_text("synthetic-unselected-token")
+        ambient={"HUGGING_FACE_HUB_TOKEN":"synthetic-legacy-token","HF_TOKEN_PATH":str(cached),
+            "HF_OIDC_RESOURCE":"synthetic-oidc","HF_HOME":str(self.root),"HF_HUB_DISABLE_IMPLICIT_TOKEN":"0"}
+        with patch.dict(os.environ,ambient): env=child_environment(self.root)
+        self.assertNotIn("HUGGING_FACE_HUB_TOKEN",env); self.assertNotIn("HF_OIDC_RESOURCE",env)
+        self.assertNotEqual(str(cached),env["HF_TOKEN_PATH"])
+        self.assertEqual("1",env["HF_HUB_DISABLE_IMPLICIT_TOKEN"])
+        self.assertEqual("synthetic-unselected-token",cached.read_text())
+
+    @unittest.skipUnless(os.name=="posix","Pinned remote Linux Hub authentication")
+    def test_pinned_hub_ignores_ambient_cache_legacy_and_oidc_but_accepts_selected_credential(self):
+        try: version=importlib.metadata.version("huggingface-hub")
+        except importlib.metadata.PackageNotFoundError: self.skipTest("Optional pinned Hub dependency")
+        if version!="2.3.0": self.skipTest("Exact pinned Hub2.3.0 required")
+        ambient=self.root/"ambient"; ambient.mkdir(); (ambient/"token").write_text("synthetic-cached-token")
+        model_cache=self.root/"model-cache"; model_cache.mkdir(); (model_cache/"token").write_text("synthetic-cache-token")
+        for selected in (False,True):
+            with self.subTest(selected=selected):
+                if selected:
+                    secret=self.root/".hfkey"; secret.write_text("synthetic-selected-token"); secret.chmod(0o600)
+                with patch.dict(os.environ,{"HF_HOME":str(ambient),"HF_TOKEN_PATH":str(ambient/"token"),
+                        "HF_TOKEN":"synthetic-ambient-token","HUGGING_FACE_HUB_TOKEN":"synthetic-legacy-token",
+                        "HF_OIDC_RESOURCE":"synthetic-oidc-resource","ENGINE_ROOM_WEIGHTS":str(model_cache)}):
+                    env=child_environment(self.root)
+                expected="'synthetic-selected-token'" if selected else "None"
+                code="from huggingface_hub import get_token; from huggingface_hub.utils import build_hf_headers; assert get_token()=="+expected+"; headers=build_hf_headers(); assert headers.get('authorization')=="+("'Bearer synthetic-selected-token'" if selected else "None")
+                result=subprocess.run([sys.executable,"-I","-c",code],env=env,capture_output=True,text=True,timeout=15)
+                self.assertEqual(0,result.returncode,result.stderr)
+                self.assertNotEqual(str(model_cache),env["HF_HOME"])
+        self.assertEqual("synthetic-cached-token",(ambient/"token").read_text())
+        self.assertEqual("synthetic-cache-token",(model_cache/"token").read_text())
+
     def test_oversized_secret_is_refused_without_model_execution(self):
         secret=self.root/".hfkey"; secret.write_text("x"*16385); secret.chmod(0o600)
         with self.assertRaises(ValueError): child_environment(self.root)

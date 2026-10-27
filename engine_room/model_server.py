@@ -4,6 +4,7 @@ import os
 import re
 import hashlib
 import shutil
+from pathlib import Path
 
 from .model_validation import gguf_files, safetensors_files
 from .storage import plan_storage
@@ -52,6 +53,28 @@ def command(settings, weights='weights'):
     return args
 
 
+def checked_cache_root(weights):
+    """Refuse redirected roots before creating anything in an attached volume."""
+    absolute=os.path.abspath(weights)
+    for path in (Path(absolute),*Path(absolute).parents):
+        if path.is_symlink() or getattr(path,"is_junction",lambda:False)():
+            raise ValueError('A model cache root or parent is linked')
+    if os.path.normcase(os.path.realpath(absolute))!=os.path.normcase(absolute):
+        raise ValueError('A model cache root was redirected')
+    # Existing Hub blobs and local-dir metadata can also redirect later writes.
+    # Legitimate snapshot file links inside this selected cache remain usable.
+    count=0
+    if os.path.isdir(absolute):
+        for directory,dirs,files in os.walk(absolute,followlinks=False):
+            for name in dirs+files:
+                count+=1
+                if count>10000: raise ValueError('The model cache exceeds the inspection bound')
+                path=os.path.join(directory,name)
+                if os.path.commonpath([absolute,os.path.realpath(path)])!=absolute:
+                    raise ValueError('A model cache link points outside the selected storage folder')
+    return absolute
+
+
 def check_storage(settings, weights, names, snapshot_cache=False):
     """Count only usable hash-verified cache; check the real filesystem after installation."""
     sizes = settings.get('fileSizes')
@@ -60,8 +83,9 @@ def check_storage(settings, weights, names, snapshot_cache=False):
         raise ValueError('Published sizes for all selected model files are required')
     if any(type(sizes[n]) is not int or sizes[n] <= 0 for n in names):
         raise ValueError('Invalid published model sizes')
+    weights=checked_cache_root(weights)
     os.makedirs(weights, exist_ok=True)
-    weights = os.path.realpath(weights)
+    checked_cache_root(weights)
     cached = 0
     for name in names:
         if snapshot_cache:
@@ -142,21 +166,14 @@ def main():
     command(settings)  # Validate before inspecting any supplied storage path.
     weights = choose_weights(settings,root)
     args = command(settings, weights)
-    # Key goes only into this process environment, then the upload is removed.
-    secret = f'{root}/.hfkey'
-    if os.path.exists(secret):
-        try:
-            with open(secret) as src:
-                os.environ['HF_TOKEN'] = src.read().strip()
-        finally:
-            os.remove(secret)
+    # The supervisor consumes the sole selected credential before spawning this
+    # clean process. Authentication state must never share persistent model storage.
     if settings.get('engine') == 'llama.cpp':
         download(settings, weights)
     else:
         sizes = settings.get('fileSizes')
         if not isinstance(sizes, dict) or not sizes:
             raise ValueError('Published safetensors sizes are required')
-        os.environ['HF_HOME'] = weights
         os.environ['HF_HUB_CACHE'] = os.path.join(weights, 'hub')
         check_storage(settings, weights, list(sizes), snapshot_cache=True)
     os.execvp(args[0], args)
