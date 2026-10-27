@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 from types import SimpleNamespace
@@ -31,6 +32,13 @@ class ModelTests(unittest.TestCase):
                ["m-00000-of-00001.gguf"],["m.gguf","another.gguf"]]
         for files in cases:
             with self.subTest(files=files),self.assertRaises(ValueError): command(self.settings(files))
+
+    def test_validator_accepts_utf8_bom_from_windows_powershell(self):
+        script=Path(__file__).resolve().parents[1]/"engine_room"/"model_validation.py"
+        request=b'\xef\xbb\xbf{"engine":"llama.cpp","files":["model.gguf"],"mmproj":""}\n'
+        result=subprocess.run([sys.executable,"-I",str(script)],input=request,capture_output=True,timeout=30)
+        self.assertEqual(0,result.returncode,result.stderr)
+        self.assertEqual(["model.gguf"],json.loads(result.stdout)["files"])
 
     def test_unsafe_model_and_projector_names_are_rejected(self):
         for name in ["model Q4.gguf","../model.gguf","a/../../x.gguf","bad;cmd.gguf","/absolute.gguf","model.GGUF"]:

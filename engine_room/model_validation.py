@@ -49,7 +49,8 @@ def safetensors_files(settings):
 
 def main():
     try:
-        settings=json.load(sys.stdin)
+        # Bytes: Windows PowerShell prefixes a UTF-8 BOM when the console uses UTF-8.
+        settings=json.loads(sys.stdin.buffer.read())
         if settings.get("engine","llama.cpp")=="llama.cpp":
             files,projector=gguf_files(settings)
         elif settings.get("engine")=="vLLM":
