@@ -9,7 +9,8 @@
     "Governance / secrets",
     "Governance / actions-security",
     "Project / checks",
-    "governance/exact-head-review"
+    "governance/exact-head-review",
+    "Project / Windows checks"
   ],
   "review": {
     "requiredApprovals": 0,

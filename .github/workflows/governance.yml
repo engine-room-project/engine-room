@@ -84,3 +84,17 @@ jobs:
           persist-credentials: false
       - name: Run project lint, test, and build checks
         run: sh scripts/ci/project-checks.sh
+
+  project-windows:
+    name: Project / Windows checks
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out exact revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Run Windows source and lifecycle checks
+        shell: bash
+        run: sh scripts/ci/project-checks.sh
