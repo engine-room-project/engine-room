@@ -5,6 +5,21 @@ evidence. It has not passed real independent-account, GPU, shutdown or billing a
 This proposal grants no deployment, credentials, paid rental, governance merge or publication
 permission. The approved independent-controller design remains unchanged.
 
+## Current owner decisions and evidence
+
+The owner approved the existing independent Linux host deployment, and the dedicated
+credential-free controller has deployed-host evidence in CONTROLLER_HOST_ACCEPTANCE.md.
+Direct provider sign-in is approved but deferred while the owner prepares separate validation
+accounts. MIT and public repository visibility are approved; neither grants final release
+publication or agent authority to merge governance. Governance-only PR1 is open for owner
+ratification, with successful bootstrap CI and an explicit initial base-policy limitation.
+
+The owner authorized using current prepaid provider balances only after fresh authenticated
+balance checks and concrete bounded test limits. No purchase, top-up or new subscription is
+authorized, and no historical balance or budget can substitute for those current checks.
+Independent-account/configuration acceptance remains mandatory. The staged sequence below
+still governs uncompleted work; completed approvals must not be requested again.
+
 ## Decision 1: independent host and private deployment
 
 Recommended deployment target: an owner-designated existing independently powered Linux
