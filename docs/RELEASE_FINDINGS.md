@@ -85,7 +85,9 @@ paid rentals or shared infrastructure were configured for these implementation c
   with a separately approved concrete budget for paid validation.
 - Code review passed at80ea9de; preserve exact-state coverage through remaining validation.
   The owner selected MIT and approved public repository visibility; the owner-only maintainer
-  team and no-bypass main ruleset are established. The public repository is still empty.
+  team and no-bypass main ruleset are established. Governance-only PR1 is open with five
+  successful remote bootstrap checks; no product source is uploaded. Its minimal base
+  cannot yet provide the ratified base-policy exact-head gate.
   Initial governance ratification, remaining live validation and final publication approval
   remain open. The independent credential-free controller has deployed-host evidence.
 
