@@ -36,3 +36,18 @@ No shared application, proxy route, ingress, existing key or service was changed
 Private host addresses, account/device identifiers, SSH keys and raw logs remain outside
 release source. Provider/account/GPU/tool-protocol, billing, independent Windows onboarding,
 actual shared-host reboot and final owner gates remain open.
+
+## Optional Colab dependency runtime
+
+The exact controller lock installed into a new isolated Python3.12 environment using
+hash enforcement, binary distributions and the explicit public package index. No system
+Python packages or other applications were altered. pip check passed; google-colab-cli0.7.5
+and websocket-client1.9.2 match the inspected lock. The new service and root-owned forced
+wrapper use the same isolated interpreter. Private SSH health, arbitrary-command refusal
+and port-forwarding refusal passed again after that change.
+
+All13 packaged dependency tests passed as the actual dedicated non-root controller user,
+including narrow PKCE construction and bounded synthetic WebSocket/transport cases. These
+tests make no provider authentication/network calls. There are still zero saved provider
+credentials and connections. Real consent, independent-account onboarding and billing remain
+open; the owner is preparing separate validation accounts.
