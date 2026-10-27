@@ -46,3 +46,14 @@ The reviewer role was read-only; the implementer faithfully recorded its explici
 in the ignored attestation file. This local record is not cryptographically independent.
 Future behavior-changing edits invalidate review; prose-only evidence follows the configured
 classifier exemption. Owner-controlled hosting/governance/licence/publication gates remain.
+
+## MIT package follow-up
+
+The same independent reviewer inspected 97606be..80ea9de and connected source after the
+owner selected MIT. Verdict: PASS at80ea9de89e80b1a1394fc9ec11fda1c91073d046,
+base d017cc7, substantive-state digest
+187b0eab05f2b0a1cd02315cdd92abb753510c414d0f717626f24bedd5cf0ada.
+The builder includes and requires LICENSE; installation requires it too. Upstream licence
+texts and the earlier authentication/cache corrections remain unchanged. No further material
+defect was found in that increment. Current Windows531 tests passed442 with89 skips,
+plus17 planning checks. Review remains code evidence, not live provider or billing acceptance.

@@ -1,7 +1,9 @@
 # Proposed publication history inspection
 
-No source has been pushed. Governance/team ratification, the project licence, live acceptance,
-exact final independent review and final owner publication approval remain open. This report
+No source has been pushed. The owner selected MIT and approved public repository visibility;
+the owner-only maintainer team and active main ruleset exist. Governance ratification, live
+acceptance and final owner publication approval remain open. Exact code review passed at
+80ea9de; subsequent behavior changes require renewed coverage. This report
 is evidence for the inspected branch, not an authorization to publish.
 
 The proposed codex/release-candidate branch retains these four foundation/import commits:

@@ -57,3 +57,22 @@ regressions passed8 tests. No real provider account or paid resource was used.
 The same code state passed independent follow-up review; see INDEPENDENT_REVIEW.md.
 This remains same-machine automated/package evidence, not independent user-account,
 actual controller deployment, provider/GPU/tool-protocol or billing acceptance.
+
+## Candidate 4 with owner-selected MIT
+
+Source commit:80ea9de89e80b1a1394fc9ec11fda1c91073d046.
+Archive SHA-256:f191cccc239729a602eec624f61119b0a9bd1a9f84622460e5caa50a2031f9e8.
+171 source files plus manifest. Exact inventory, ZIP CRC, every file hash and byte count,
+MIT licence and all four required upstream licence texts passed inspection. Known personal
+and private-network patterns had no matches; Gitleaks scanned1.64MB and found no leaks.
+
+The actual extracted installer created a new spaced destination and temporary shortcut
+using a fresh Python environment without pip. The installed source passed531 Windows tests:
+442 passed,89 skips, plus17 planning checks. In an empty Linux home with the isolated pinned
+optional Colab dependencies, the installed source passed531 tests:523 passed,8 skips.
+Empty Windows startup reported no provider/controller and created no runtime state.
+The exact source code also passed independent follow-up review.
+
+These are same-machine package and automated cross-platform checks. Independent Windows
+account/OS onboarding, real provider/GPU/shutdown, tool-protocol and billing gates remain open.
+No provider credentials, paid resources or finished release publication were used here.

@@ -1,9 +1,10 @@
 # Release findings and evidence
 
 All 22 findings remain **OPEN**. Implementation and automated evidence below are partial
-progress, not closure. Both initial rental connectors and the optional attachment connector remain candidates. Two unpublished source packages have same-machine inspection/installation evidence in
+progress, not closure. Both initial rental connectors and the optional attachment connector remain candidates. Four unpublished source packages have same-machine inspection/installation evidence in
 `docs/evidence/SOURCE_PACKAGE_ACCEPTANCE.md`. Independent-account provider/billing acceptance remains incomplete. Code review passed
-at97606be after two corrections; any later behavioral edits require exact-state follow-up. No product source has been pushed.
+at80ea9de after the security corrections and MIT packaging follow-up; any later behavioral
+edits require exact-state follow-up. No product source has been pushed.
 
 | Finding | Required outcome | Implementation and relevant tests | Remaining closure evidence |
 | --- | --- | --- | --- |
@@ -78,12 +79,15 @@ paid rentals or shared infrastructure were configured for these implementation c
   protocol/model compatibility and existing project/admin policy acceptance remain open.
 - Initial source packages are built and inspected; full source/history/package privacy
   review and independent-account clean install remain open.
-  Unpublished development refs need sanitization before first source push.
+  Publication history is separate from preserved local development refs; only the inspected
+  publication branch may be proposed for upload, with fresh scans before its first push.
 - Independent accounts/configuration and live provider, shutdown and billing acceptance,
   with a separately approved concrete budget for paid validation.
-- Code review passed at97606be; preserve exact-state coverage through remaining validation.
-  Owner governance/team ratification, licence, deployment
-  and final publication decisions. The private remote exists; no publication approval is implied.
+- Code review passed at80ea9de; preserve exact-state coverage through remaining validation.
+  The owner selected MIT and approved public repository visibility; the owner-only maintainer
+  team and no-bypass main ruleset are established. The public repository is still empty.
+  Initial governance ratification, remaining live validation and final publication approval
+  remain open. The independent credential-free controller has deployed-host evidence.
 
 Required third-party notices remain part of source/payload inspection. Any behavioral edit
 after final review invalidates that review. No row above has an evidence-backed CLOSED status.
