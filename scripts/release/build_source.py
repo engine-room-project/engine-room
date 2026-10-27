@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path,PurePosixPath
 import re
 import subprocess
@@ -14,8 +15,12 @@ REQUIRED={"LICENSE","Install-EngineRoom.ps1","README.md","EngineRoom.ps1","deskt
     "THIRD_PARTY_NOTICES/README.md","THIRD_PARTY_NOTICES/google-colab-cli-LICENSE.txt","THIRD_PARTY_NOTICES/vllm-LICENSE.txt","THIRD_PARTY_NOTICES/llama.cpp-LICENSE.txt","THIRD_PARTY_NOTICES/huggingface-hub-LICENSE.txt"}
 FORBIDDEN={"__pycache__",".git",".venv","credentials","receipts","state","controller-owner","runpod-operations","colab-operations"}
 
+def git_env():
+    # Git hooks export GIT_DIR and friends, which override -C and redirect to the calling repository.
+    return {k:v for k,v in os.environ.items() if not k.startswith("GIT_")}
+
 def git(root,*args):
-    return subprocess.check_output(["git","-C",str(root),*args],stderr=subprocess.PIPE)
+    return subprocess.check_output(["git","-C",str(root),*args],stderr=subprocess.PIPE,env=git_env())
 
 def build(root,output,revision="HEAD"):
     if revision!="HEAD" and not re.fullmatch(r"[a-f0-9]{40}",revision): raise ValueError("Use HEAD or an exact commit ID.")

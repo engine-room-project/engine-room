@@ -7,7 +7,7 @@ import subprocess
 import tempfile
 import unittest
 import zipfile
-from scripts.release.build_source import build,REQUIRED
+from scripts.release.build_source import build,git_env,REQUIRED
 
 
 @unittest.skipUnless(shutil.which("git"),"Git builds committed source candidates")
@@ -21,7 +21,7 @@ class SourcePackageTests(unittest.TestCase):
         (self.root/"WORKLOG.md").write_text("Development notes must not ship.",encoding="utf-8")
         self.git("add","."); self.commit()
     def git(self,*args,input=None):
-        return subprocess.check_output(["git","-C",str(self.root),*args],input=input,stderr=subprocess.PIPE)
+        return subprocess.check_output(["git","-C",str(self.root),*args],input=input,stderr=subprocess.PIPE,env=git_env())
     def commit(self):
         self.git("-c","user.name=Engine Room Tests","-c","user.email=tests@engine-room.invalid","commit","--quiet","-m","test: prepare synthetic source")
     def test_reproducible_archive_uses_committed_bytes_and_preserves_notices(self):
