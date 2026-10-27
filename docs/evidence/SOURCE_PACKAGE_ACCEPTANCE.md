@@ -41,3 +41,19 @@ from ambient Google/Cloud configuration; no provider authentication occurred.
 No real account, credentials, paid resource or shared infrastructure was configured.
 The Windows account/OS was the development account, not an independent user account.
 No source has been pushed; unpublished development history still needs separate sanitation.
+
+## Candidate 3 after independent-review corrections
+
+Source commit:97606be93f85a71e1f4e7bd714371d8b993b6804.
+Archive SHA-256:52179cc534209135a51eb5709c9857bb8ce04ee63a65e5a0e06af29f5caf2370.
+170 source files plus manifest. Verified exact inventory/CRC and every file hash/byte count;
+known personal/private-network pattern scan found no matches. Gitleaks found no secrets
+in1.63MB; required notices are present. The actual installer created a new spaced directory
+and temporary shortcut using a fresh interpreter without pip. Empty first launch created no
+provider state. Installed Windows530 tests:441 passed,89 skipped; installed Linux530 tests:
+522 passed,8 skipped. Packaged planning17 checks passed. Separate exact Hub2.3 authentication
+regressions passed8 tests. No real provider account or paid resource was used.
+
+The same code state passed independent follow-up review; see INDEPENDENT_REVIEW.md.
+This remains same-machine automated/package evidence, not independent user-account,
+actual controller deployment, provider/GPU/tool-protocol or billing acceptance.

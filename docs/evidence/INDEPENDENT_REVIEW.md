@@ -31,3 +31,18 @@ and metadata links leave unrelated directories/files unchanged.
 These are implementation corrections, not an independent approval. Full checks, corrected
 exact-state independent follow-up and rebuilt actual package acceptance remain required.
 Live independent-account, host, GPU, tool-protocol and billing gates remain separately open.
+
+## Corrected-state independent follow-up
+
+Exact reviewed commit:97606be93f85a71e1f4e7bd714371d8b993b6804.
+Reviewer:/root/release_independent_review; implementation agent:/root.
+Verdict:PASS for code review only. Both findings addressed; no further material defect
+found in the corrections. No independent-account/provider/GPU/billing approval is implied.
+
+Code digest with base d017cc7:
+2aa2c339a00dc96609a23d9347452c919d36acd2a06c3dcfcc075a9902a1aec6.
+The repository verifier confirms that digest against the reviewer-supplied attestation.
+The reviewer role was read-only; the implementer faithfully recorded its explicit report
+in the ignored attestation file. This local record is not cryptographically independent.
+Future behavior-changing edits invalidate review; prose-only evidence follows the configured
+classifier exemption. Owner-controlled hosting/governance/licence/publication gates remain.
