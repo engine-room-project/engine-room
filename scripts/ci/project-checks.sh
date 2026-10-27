@@ -7,6 +7,9 @@ for path in scripts/ci/*.sh scripts/hooks/*.sh remote/*.sh; do
 done
 py=python3
 "$py" -c "" 2>/dev/null || py=python
+# Windows runners give a short (8.3) temp path; path-safety checks correctly treat it as redirected.
+TMPDIR=$("$py" -c "import os,tempfile; print(os.path.realpath(tempfile.gettempdir()))")
+export TMPDIR
 "$py" - <<'PY'
 import json
 from pathlib import Path
