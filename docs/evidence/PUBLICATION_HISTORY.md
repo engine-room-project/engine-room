@@ -54,6 +54,10 @@ still unborn; its active no-bypass ruleset is unchanged. Only the human owner ma
 or merge governance. Initial main establishment and remote enforcement verification remain
 separate required steps; no control exception, product upload or release is implied.
 
+The owner subsequently ratified the exact PR1 governance content at2090bbe. This resolves
+content approval only. The owner-controlled merge and protected-main bootstrap remain
+pending; no agent merge or protection exception follows from that ratification.
+
 Complete Windows checks at the product-import state passed525 tests (439 passed,86 skipped)
 and17 planning checks. The same product code in the actual installed source package passed
 525 Linux tests (518 passed,7 skipped). See SOURCE_PACKAGE_ACCEPTANCE.md for exact artifact
